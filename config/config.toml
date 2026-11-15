@@ -1,0 +1,61 @@
+# Merendón shadow interactive: build configuration
+# All paths are relative to the project root (the folder that holds config/).
+
+[project]
+name = "merendon-shadow-interactive"
+script_version = "0.3.0"
+title = "When the Merendón Takes the Sun"
+
+[paths]
+template = "templates/template.html"
+frames_json = "output/frames.json"
+page = "output/index.html"
+
+[dem]
+# Elevation model in a projected CRS in metres (here EPSG:32616).
+path = "data/dem16m.tiff"
+citation = "European Space Agency (2024). Copernicus Global Digital Elevation Model. Distributed by OpenTopography. https://doi.org/10.5069/G9028PQB"
+
+[source]
+# GeoPackage with the city frame polygon and the r.sunmask front lines.
+gpkg = "data/shadow.gpkg"
+crs = "EPSG:32616"
+city_layer = "spsshadow2026161646"
+
+[study_area]
+# The city frame is cut to the limits of the shadow raster. A two-pixel strip
+# along the raster's east edge is flagged as shadow in every run, so it is left out.
+x_max = 402554.0
+y_min = 1708525.0
+lit_anchor = [401500.0, 1710000.0]   # a point that is sunlit in every front-line frame
+
+[sun]
+date = "2026-11-16"
+utc_offset_hours = -6
+lat = 15.5044
+lon = -88.0250
+
+[landmark]
+name = "Parque Central"
+lat = 15.5044
+lon = -88.0250
+
+[animation]
+start = "16:15"
+end = "17:00"
+ray_step_m = 30.0
+# A sunlit cell is "undetermined" when its ray toward the sun leaves the DEM
+# below this height: terrain outside the DEM could still shade it.
+outside_terrain_max_m = 2300.0
+
+# Front-line layers -> the local time each one is labelled with.
+# Used only by compare_frames.py (the layer names carry typos, so they are mapped by hand).
+[frames]
+shadow202611161615 = "16:15"
+shadow202611161630 = "16:30"
+shadow202611161640 = "16:40"
+shadow20261161646 = "16:46"
+shadow20261162647 = "16:47"
+shadow202611161648 = "16:48"
+shadow20261161649 = "16:49"
+shadow202611161650 = "16:50"
